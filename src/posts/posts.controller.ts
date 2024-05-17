@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { types } from 'cassandra-driver';
+import { AuthGuard } from 'src/auth-guard/auth-guard.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -14,6 +15,7 @@ export class PostsController {
   }
 
   @Get()
+  @UseGuards(new AuthGuard())
   findAll() {
     return this.postsService.findAll();
   }
