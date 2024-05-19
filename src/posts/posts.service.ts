@@ -1,39 +1,52 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostRepo } from './post.repository';
 import { Post } from './entities/post.entity';
-import { v4 as uuidv4 } from 'uuid';
-import { types } from 'cassandra-driver';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+
 
 @Injectable()
 export class PostsService {
 
-  constructor(private postRepo: PostRepo){}
+  constructor(
+    @InjectRepository(Post) private postsRepo: Repository<Post>,
+    private userService: UsersService
+  ) {}
 
-  create(createPostDto: CreatePostDto) {
-    const newPost = new Post();
-    newPost.text = createPostDto.text;
-    newPost.user_id = '1';
-    newPost.createdat = new Date();
-    newPost.updatedat = newPost.createdat;
-    newPost.id = uuidv4();
-    return this.postRepo.createPost(newPost);
+  async create(createPostDto: CreatePostDto, user: User) {
+    const res =  await this.postsRepo.save({
+      ...createPostDto,
+      user_id: user.id
+    });
+
+    // upsert the user from the jwt
+    await this.userService.upsert(user)
+
+    return res
   }
 
   async findAll() {
-    return await this.postRepo.getPosts();
+    return await this.postsRepo.find();
   }
 
-  async findOne(id: types.Uuid) {
-    return await this.postRepo.getPostById(id);
+  async findOne(id: string) {
+    const res = await this.postsRepo.findOne({
+      where: {id}
+    });
+    if (!res) {
+      throw new NotFoundException('Post not found');
+    }
+    return res;
   }
 
-  update(id: types.Uuid, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    return await this.postsRepo.update(id, updatePostDto);
   }
 
-  remove(id: types.Uuid) {
-    return `This action removes a #${id} post`;
+  async remove(id: string) {
+    return await this.postsRepo.delete(id);
   }
 }

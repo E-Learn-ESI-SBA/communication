@@ -1,41 +1,53 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Req, Post, HttpCode, HttpStatus } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { types } from 'cassandra-driver';
-import { AuthGuard } from 'src/auth-guard/auth-guard.guard';
+import { AuthGuard } from '../guards/auth-guard.guard';
+import { PostIdParamDto } from './dto/postid-param.dto';
+import { PostOwnerGuard } from '../guards/post-owner.guard';
+import { Post as PostEntity } from './entities/post.entity';
+import { User } from '../users/entities/user.entity';
 
 @Controller('posts')
+@UseGuards(new AuthGuard())
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  create(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  @HttpCode(201)
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @Req() req: (Request & { user: { id: string } }),
+  ) {
+    return this.postsService.create(createPostDto, req.user as User);
   }
 
   @Get()
-  @UseGuards(new AuthGuard())
+  @HttpCode(200)
   findAll() {
     return this.postsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    // convvert id to types.Uuid
-    const ID = types.Uuid.fromString(id);
-    return this.postsService.findOne(ID);
+  @Get(':postId')
+  @HttpCode(200)
+  findOne(@Param() params: PostIdParamDto) {
+    return this.postsService.findOne(params.postId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    const ID = types.Uuid.fromString(id);
-    return this.postsService.update(ID, updatePostDto);
+  @Patch(':postId')
+  @UseGuards(PostOwnerGuard(PostEntity))
+  @HttpCode(200)
+  update(
+    @Param() params: PostIdParamDto,
+    @Body() updatePostDto: UpdatePostDto
+  ) {
+    return this.postsService.update(params.postId, updatePostDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    const ID = types.Uuid.fromString(id);
-    return this.postsService.remove(ID);
+  @Delete(':postId')
+  @UseGuards(PostOwnerGuard(PostEntity))
+  @HttpCode(200)
+  remove(@Param() params: PostIdParamDto) {
+    return this.postsService.remove(params.postId);
   }
 }
