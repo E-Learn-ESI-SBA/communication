@@ -1,23 +1,11 @@
 version: '3'
 
 services:
-  cassandra:
-    image: cassandra
-    ports:
-      - "9042:9042"
+  db:
+    image: postgres:latest
+    container_name: postgres_db
     environment:
-      - CASSANDRA_USER=godsword
-      - CASSANDRA_PASSWORD=coolpass
-    hostname: cassandra
-    container_name: cassandra_db
-
-  cassandra_migrate:
-    build: .
-    depends_on:
-      - cassandra
+      POSTGRES_USER: communication
+      POSTGRES_PASSWORD: communication
     ports:
-      - 1337:1337
-    volumes:
-      - ./migrations:/app/migrations
-
-#  cassandra-migrate -H cassandra -p 9042 -c db_config.yml migrate
+      - "5432:5432"
