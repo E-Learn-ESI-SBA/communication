@@ -7,6 +7,7 @@ import { PostIdParamDto } from './dto/postid-param.dto';
 import { PostOwnerGuard } from '../guards/post-owner.guard';
 import { Post as PostEntity } from './entities/post.entity';
 import { User } from '../users/entities/user.entity';
+import { ApiBody, ApiParam } from '@nestjs/swagger'
 
 @Controller('posts')
 @UseGuards(new AuthGuard())
@@ -15,6 +16,7 @@ export class PostsController {
 
   @Post()
   @HttpCode(201)
+  @ApiBody({type: CreatePostDto})
   create(
     @Body() createPostDto: CreatePostDto,
     @Req() req: (Request & { user: { id: string } }),
@@ -30,6 +32,7 @@ export class PostsController {
 
   @Get(':postId')
   @HttpCode(200)
+  @ApiParam({name: 'postId', required: true, type: 'uuid'})
   findOne(@Param() params: PostIdParamDto) {
     return this.postsService.findOne(params.postId);
   }
@@ -37,6 +40,7 @@ export class PostsController {
   @Patch(':postId')
   @UseGuards(PostOwnerGuard(PostEntity))
   @HttpCode(200)
+  @ApiParam({name: 'postId', required: true, type: 'uuid'})
   update(
     @Param() params: PostIdParamDto,
     @Body() updatePostDto: UpdatePostDto
@@ -47,6 +51,7 @@ export class PostsController {
   @Delete(':postId')
   @UseGuards(PostOwnerGuard(PostEntity))
   @HttpCode(200)
+  @ApiParam({name: 'postId', required: true, type: 'uuid'})
   remove(@Param() params: PostIdParamDto) {
     return this.postsService.remove(params.postId);
   }
