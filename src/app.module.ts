@@ -8,6 +8,7 @@ import { Post } from './posts/entities/post.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { Follow } from './users/entities/follow.entity';
+import { Vote } from './posts/entities/vote.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { Follow } from './users/entities/follow.entity';
       username: 'communication',
       password: 'communication',
       database: 'communication',
-      entities: [Post, User, Follow],
+      entities: [Post, User, Follow, Vote],
       synchronize: true,
     }),
     UsersModule,

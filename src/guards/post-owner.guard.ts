@@ -25,14 +25,15 @@ export const PostOwnerGuard = (entityClass: EntityTarget<ObjectLiteral>): Type<C
 
             //fetch post from db
             const post = await this.dataSource.getRepository(entityClass).findOne({
-                where: {id: params.postId}
+                where: {id: params.postId},
+                relations: ['user'],
             });
 
             if (!post) {
               throw new NotFoundException("Post not found");
             }
 
-            if (post.user_id !== request.user.id && request.user.role !== 'admin') {
+            if (post.user.id !== request.user.id && request.user.role !== 'admin') {
               throw new UnauthorizedException("unauthorized");
             }
 

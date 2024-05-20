@@ -1,4 +1,16 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
+import { on } from "events";
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+    OneToMany,
+    JoinColumn,
+    ManyToOne
+} from "typeorm"
+import { Vote } from "./vote.entity";
+import { User } from "../../users/entities/user.entity";
 
 @Entity('posts')
 export class Post {
@@ -9,8 +21,8 @@ export class Post {
     @Column()
     text: string
 
-    @Column()
-    user_id: string
+    @ManyToOne(() => User, user => user.posts, { onDelete: "CASCADE" })
+    user: User
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     created_at: Date;
@@ -23,4 +35,8 @@ export class Post {
 
     @Column({ default: 0 })
     downvotes_count: number
+    
+    @OneToMany(() => Vote, vote => vote.post)
+    @JoinColumn()
+    votes: Vote[]
 }
