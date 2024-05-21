@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn,OneToOne } from "typeorm";
 import { Follow } from "./follow.entity";
 import { Vote } from "../../posts/entities/vote.entity";
 import { Post } from "../../posts/entities/post.entity";
-
+import { Profile } from "src/profile/entities/profile.entity";
 
 @Entity('users')
 export class User {
@@ -31,4 +31,8 @@ export class User {
     @OneToMany( () => Post, post => post.user, { cascade: true })
     @JoinColumn()
     posts: Post[]
+
+    @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+    @JoinColumn()
+    profile: Profile;
 }
