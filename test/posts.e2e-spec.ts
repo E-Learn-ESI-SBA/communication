@@ -34,9 +34,9 @@ describe('postsController (e2e)', () => {
 
   // test create a post
   it('/posts (POST)', async () => {
-    const post1Data = { text: 'This is a valid post by student' };
-    const post2Data = { text: 'this is another valid post by student' }
-    const post3Data = { text: 'this is a valid post by teacher' }
+    const post1Data = { text: 'This is a valid post by student', images: ['image1', 'image2']};
+    const post2Data = { text: 'this is another valid post by student' , images: ['image3', 'image4']}
+    const post3Data = { text: 'this is a valid post by teacher' , images: []}
 
     const res1 =  await request(app.getHttpServer())
       .post('/posts')

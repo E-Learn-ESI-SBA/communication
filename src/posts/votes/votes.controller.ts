@@ -6,7 +6,7 @@ import { PostOwnerGuard } from '../../guards/post-owner.guard';
 import { Post as PostEntity } from '../entities/post.entity';
 
 @Controller('votes')
-@UseGuards(new AuthGuard())
+@UseGuards(AuthGuard())
 export class VotesController {
   constructor(private readonly votesService: VotesService) {}
 

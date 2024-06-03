@@ -21,6 +21,10 @@ export class Post {
     @Column()
     text: string
 
+    //string array for images (postgres)
+    @Column("simple-array", { default: [] })
+    images: string[]
+
     @ManyToOne(() => User, user => user.posts, { onDelete: "CASCADE" })
     user: User
 

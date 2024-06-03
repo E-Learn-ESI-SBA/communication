@@ -10,7 +10,7 @@ import { User } from '../users/entities/user.entity';
 import { ApiBody, ApiParam } from '@nestjs/swagger'
 
 @Controller('posts')
-@UseGuards(new AuthGuard())
+@UseGuards(AuthGuard())
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
