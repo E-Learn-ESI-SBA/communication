@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { UserIdParamDto } from './dto/userId.dto';
 
 @Controller('users')
-@UseGuards(new AuthGuard())
+@UseGuards(AuthGuard())
 export class UsersController {
 
     constructor(private usersService: UsersService) {}   

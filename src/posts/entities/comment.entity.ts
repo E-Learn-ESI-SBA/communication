@@ -1,15 +1,15 @@
 import { User } from "../../users/entities/user.entity"
-import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, UpdateDateColumn, CreateDateColumn } from "typeorm"
+import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { Post } from "./post.entity"
 
-@Entity('votes')
-export class Vote {
+@Entity('comments')
+export class Comment {
 
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column({ type: 'enum', enum: ['up', 'down'] })
-    vote: 'up' | 'down'
+    @Column()
+    text: string
 
     @ManyToOne(() => User, user=> user.votes , { onDelete: 'CASCADE' })
     user: User
@@ -20,4 +20,6 @@ export class Vote {
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
     created_at: Date;
 
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
+    updated_at: Date;
 }

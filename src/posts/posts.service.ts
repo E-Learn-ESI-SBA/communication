@@ -17,14 +17,12 @@ export class PostsService {
   ) {}
 
   async create(createPostDto: CreatePostDto, user: User) {
-    // upsert the user from the jwt
-    await this.userService.upsert(user)
 
     const res =  await this.postsRepo.insert({
       user: {
         id: user.id 
       },
-      text: createPostDto.text
+      ...createPostDto
     })
 
 
