@@ -11,6 +11,7 @@ import {
 } from "typeorm"
 import { Vote } from "./vote.entity";
 import { User } from "../../users/entities/user.entity";
+import { Comment } from "./comment.entity";
 
 @Entity('posts')
 export class Post {
@@ -39,8 +40,15 @@ export class Post {
 
     @Column({ default: 0 })
     downvotes_count: number
+
+    @Column({ default: 0 })
+    comments_count: number
     
     @OneToMany(() => Vote, vote => vote.post)
     @JoinColumn()
     votes: Vote[]
+
+    @OneToMany(() => Comment, comment => comment.post)
+    @JoinColumn()
+    comments: Comment[]
 }

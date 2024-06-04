@@ -34,7 +34,7 @@ export const AuthGuard = (): Type<CanActivate> => {
           userToUpsert.id = user.id
           userToUpsert.avatar = user.avatar
           userToUpsert.username = user.username
-          this.userService.upsert(userToUpsert)
+          await this.userService.upsert(userToUpsert)
           return true
       } catch (e) {
           const message = e instanceof Error ? e.message : "Unauthorized";
