@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { Head, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -34,9 +34,21 @@ describe('postsController (e2e)', () => {
 
   // test create a post
   it('/posts (POST)', async () => {
-    const post1Data = { text: 'This is a valid post by student', images: ['image1', 'image2']};
-    const post2Data = { text: 'this is another valid post by student' , images: ['image3', 'image4']}
-    const post3Data = { text: 'this is a valid post by teacher' , images: []}
+    const post1Data = { 
+      text: 'This is a valid post by student', 
+      images: ['image1', 'image2'],
+      header: 'header1'
+    };
+    const post2Data = { 
+      text: 'this is another valid post by student' ,
+      images: ['image3', 'image4'],
+      header: 'header2'
+    }
+    const post3Data = {
+      text: 'this is a valid post by teacher' ,
+      images: [],
+      header: 'header3'
+    }
 
     const res1 =  await request(app.getHttpServer())
       .post('/posts')
@@ -65,6 +77,7 @@ describe('postsController (e2e)', () => {
 
   //test get post by id
   it('/posts/:postId (GET)', async () => {
+    console.log({post1Id})
     const res = await request(app.getHttpServer())
     .get(`/posts/${post1Id}`)
     .set('Authorization', `Bearer ${studentToken}`)
@@ -77,7 +90,7 @@ describe('postsController (e2e)', () => {
 
 
   it('/posts/:postId (PATCH)', async () => {
-    const postUpdates = { text: "some new desc" }
+    const postUpdates = { text: "some new desc", header: "new header"}
 
     await request(app.getHttpServer())
     .patch(`/posts/${post1Id}`)

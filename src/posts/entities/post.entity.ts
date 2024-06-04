@@ -20,6 +20,9 @@ export class Post {
     id: string
 
     @Column()
+    header: string
+
+    @Column()
     text: string
 
     //string array for images (postgres)

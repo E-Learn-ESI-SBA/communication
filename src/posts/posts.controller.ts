@@ -25,21 +25,21 @@ export class PostsController {
   }
 
   @Get()
-  @HttpCode(200)
+  @HttpCode(HttpStatus.OK)
   findAll() {
     return this.postsService.findAll();
   }
 
-  @Get(':postId')
-  @HttpCode(200)
+  @Get('/:postId')
+  @HttpCode(HttpStatus.OK)
   @ApiParam({name: 'postId', required: true, type: 'uuid'})
   findOne(@Param() params: PostIdParamDto) {
     return this.postsService.findOne(params.postId);
   }
 
-  @Patch(':postId')
-  @UseGuards(PostOwnerGuard(PostEntity))
-  @HttpCode(200)
+  @Patch('/:postId')
+  @UseGuards(PostOwnerGuard())
+  @HttpCode(HttpStatus.OK)
   @ApiParam({name: 'postId', required: true, type: 'uuid'})
   update(
     @Param() params: PostIdParamDto,
@@ -48,9 +48,9 @@ export class PostsController {
     return this.postsService.update(params.postId, updatePostDto);
   }
 
-  @Delete(':postId')
-  @UseGuards(PostOwnerGuard(PostEntity))
-  @HttpCode(200)
+  @Delete('/:postId')
+  @UseGuards(PostOwnerGuard())
+  @HttpCode(HttpStatus.OK)
   @ApiParam({name: 'postId', required: true, type: 'uuid'})
   remove(@Param() params: PostIdParamDto) {
     return this.postsService.remove(params.postId);

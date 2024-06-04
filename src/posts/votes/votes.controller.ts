@@ -34,7 +34,7 @@ export class VotesController {
 
   @Get('/:postId')
   @HttpCode(200)
-  @UseGuards(PostOwnerGuard(PostEntity))
+  @UseGuards(PostOwnerGuard())
   async get_votes(
     @Param() params: PostIdParamDto,
   ) {

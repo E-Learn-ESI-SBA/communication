@@ -1,10 +1,11 @@
 import { BadRequestException, CanActivate, ExecutionContext, Inject, Injectable, NotFoundException, Type, UnauthorizedException, mixin } from '@nestjs/common';
 import { DataSource, EntityTarget, ObjectLiteral } from 'typeorm';
 import { validate } from 'class-validator';
-import { PostIdParamDto } from 'src/posts/dto/postid-param.dto';
+import { PostIdParamDto } from '../posts/dto/postid-param.dto';
+import { Post } from '../posts/entities/post.entity';
 
 
-export const PostOwnerGuard = (entityClass: EntityTarget<ObjectLiteral>): Type<CanActivate> => {
+export const PostOwnerGuard = (): Type<CanActivate> => {
     class ScopeGuard {
         constructor(
             @Inject(DataSource) private readonly dataSource: DataSource
@@ -24,7 +25,7 @@ export const PostOwnerGuard = (entityClass: EntityTarget<ObjectLiteral>): Type<C
             });
 
             //fetch post from db
-            const post = await this.dataSource.getRepository(entityClass).findOne({
+            const post = await this.dataSource.getRepository(Post).findOne({
                 where: {id: params.postId},
                 relations: ['user'],
             });
