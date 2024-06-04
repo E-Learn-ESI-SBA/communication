@@ -7,4 +7,8 @@ export class UpdatePostDto {
     @IsString()    
     text: string;
 
+    @ApiProperty()
+    @IsString()
+    header: string;
+
 }

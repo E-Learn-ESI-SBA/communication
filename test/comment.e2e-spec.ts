@@ -29,7 +29,11 @@ describe('userContoller (e2e)', () => {
 
   // create a post for votes testing
   it('/posts (POST)', async () => {
-    const postData = { text: 'This is a valid post by student', images: []};
+    const postData = { 
+      text: 'This is a valid post by student',
+      images: [],
+      header: 'header1'
+    };
 
     const res1 =  await request(app.getHttpServer())
       .post('/posts')
