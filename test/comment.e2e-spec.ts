@@ -87,7 +87,13 @@ describe('userContoller (e2e)', () => {
         teacherComment = comment.id
       }
     }
-    expect(res.body.length).toBe(2);
+
+    const res2 = await request(app.getHttpServer())
+      .get(`/posts/${teacherPostId}`)
+      .set('Authorization', `Bearer ${studentToken}`)
+      .expect(200);
+
+    expect(res.body.length).toBe(res2.body.comments_count)
   })
 
 

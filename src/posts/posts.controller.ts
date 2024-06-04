@@ -15,7 +15,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @HttpCode(201)
+  @HttpCode(HttpStatus.CREATED)
   @ApiBody({type: CreatePostDto})
   create(
     @Body() createPostDto: CreatePostDto,

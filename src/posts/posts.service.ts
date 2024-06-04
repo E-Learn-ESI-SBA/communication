@@ -18,13 +18,13 @@ export class PostsService {
 
   async create(createPostDto: CreatePostDto, user: User) {
 
-    const res =  await this.postsRepo.insert({
-      user: {
-        id: user.id 
-      },
-      ...createPostDto
-    })
 
+    const res =  await this.postsRepo.insert({
+      ...createPostDto,
+      user: {
+        id: user.id
+      }
+    });
 
     return res
   }

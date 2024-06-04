@@ -56,7 +56,7 @@ describe('postsController (e2e)', () => {
     .send(post3Data)
     .expect(201);
 
-
+    console.log(res1.body)
     post1Id = res1.body.raw[0].id
     post2Id = res2.body.raw[0].id
 
