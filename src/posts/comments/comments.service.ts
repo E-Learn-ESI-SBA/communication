@@ -15,7 +15,7 @@ export class CommentsService {
 
 
     async addComment(comment: CreateCommentDto, userId: string, postId: string) {
-        return await this.commentRepo.insert({
+        const res =  await this.commentRepo.insert({
             ...comment,
             user: {
                 id: userId
@@ -24,13 +24,29 @@ export class CommentsService {
                 id: postId
             }
         })
+
+        await this.postRepo.increment({
+            id: postId
+        }, 'comments_count', 1)
+
+        return res
     }
 
 
     async deleteComment(commentId: string) {
-        return await this.commentRepo.delete({
+        const res =  await this.commentRepo.delete({
             id: commentId
         })
+
+        if (res.affected === 0) {
+            throw new NotFoundException("comment not found")
+        }
+
+        await this.postRepo.decrement({
+            id: commentId
+        }, 'comments_count', 1)
+
+        return res
     }
 
     async editComment(body: CreateCommentDto, commentId: string) {

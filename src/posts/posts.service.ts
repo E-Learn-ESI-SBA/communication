@@ -35,7 +35,8 @@ export class PostsService {
 
   async findOne(id: string) {
     const res = await this.postsRepo.findOne({
-      where: {id}
+      where: {id},
+      relations: ['comments']
     });
     if (!res) {
       throw new NotFoundException('Post not found');

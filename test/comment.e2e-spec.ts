@@ -89,7 +89,7 @@ describe('userContoller (e2e)', () => {
     }
 
     const res2 = await request(app.getHttpServer())
-      .get(`/posts/${teacherPostId}`)
+      .get(`/posts/${studentPostId}`)
       .set('Authorization', `Bearer ${studentToken}`)
       .expect(200);
 
@@ -120,7 +120,6 @@ describe('userContoller (e2e)', () => {
 
   // student update his comment
   it('/posts/:postId/comments/:commentId (PUT)', async () => {
-    const commentData = { text: 'This is an updated comment by student' };
 
     const res = await request(app.getHttpServer())
       .get(`/posts/${teacherPostId}/comments`)

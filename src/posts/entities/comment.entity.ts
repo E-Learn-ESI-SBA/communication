@@ -14,7 +14,7 @@ export class Comment {
     @ManyToOne(() => User, user=> user.votes , { onDelete: 'CASCADE' })
     user: User
 
-    @ManyToOne(() => Post, post => post.votes, { onDelete: 'CASCADE' })
+    @ManyToOne(() => Post, post => post.comments, { onDelete: 'CASCADE' })
     post: Post
 
     @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
