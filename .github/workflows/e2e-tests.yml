@@ -1,0 +1,38 @@
+name: Unit Tests
+
+on: [pull_request, push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: communication
+          POSTGRES_PASSWORD: communication
+          POSTGRES_DB: communication
+        ports:
+          - 5432:5432
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install
+        run: npm ci
+      - name: test posts
+        run: npm run test:e2e posts
+      - name: test comments
+        run: npm run test:e2e comment
+      - name: test votes
+        run: npm run test:e2e votes
+      - name: test follow
+        run: npm run test:e2e follow
