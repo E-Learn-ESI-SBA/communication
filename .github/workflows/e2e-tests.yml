@@ -2,6 +2,9 @@ name: Unit Tests
 
 on: [pull_request, push]
 
+env:
+    JWT_SECRET: aTZ6czFOcTFHekRrZEJHUTB5cFlZZ0M1aXQyR3FiNlltaWx5aDJFUWpIQT0K
+
 jobs:
   tests:
     runs-on: ubuntu-latest
