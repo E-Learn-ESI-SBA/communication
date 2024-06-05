@@ -17,6 +17,7 @@ import { Award } from './profile/entities/award.entity';
 import { Skill } from './profile/entities/skill.entity';
 import { OtherSkill } from './profile/entities/other-skill.entity';
 import { Education } from './profile/entities/education.entity';
+import { Save } from './posts/entities/save.entity';
 
 
 @Module({
@@ -33,7 +34,7 @@ import { Education } from './profile/entities/education.entity';
       username: 'communication',
       password: 'communication',
       database: 'communication',
-      entities: [Post, User, Follow, Vote, Comment, Profile, Experience, Project, Award, Skill, OtherSkill, Education],
+      entities: [Post, User, Save, Follow, Vote, Comment, Profile, Experience, Project, Award, Skill, OtherSkill, Education],
       synchronize: true,
     }),
     UsersModule,

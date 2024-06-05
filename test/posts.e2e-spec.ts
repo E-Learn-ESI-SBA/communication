@@ -68,7 +68,6 @@ describe('postsController (e2e)', () => {
     .send(post3Data)
     .expect(201);
 
-    console.log(res1.body)
     post1Id = res1.body.raw[0].id
     post2Id = res2.body.raw[0].id
 
@@ -77,14 +76,11 @@ describe('postsController (e2e)', () => {
 
   //test get post by id
   it('/posts/:postId (GET)', async () => {
-    console.log({post1Id})
     const res = await request(app.getHttpServer())
     .get(`/posts/${post1Id}`)
     .set('Authorization', `Bearer ${studentToken}`)
     .expect(200);
 
-    console.log({body: res.body})
-    console.log({createdPostId: post1Id})
     expect(res.body.text).toBe("This is a valid post by student")
   })
 
@@ -104,6 +100,37 @@ describe('postsController (e2e)', () => {
     .set('Authorization', `Bearer ${teacherToken}`)
     .send(postUpdates)
     .expect(401);
+  })
+
+  // save post test
+  it('/posts/:postId/save (POST)', async () => {
+    await request(app.getHttpServer())
+    .post(`/posts/${post1Id}/save`)
+    .set('Authorization', `Bearer ${studentToken}`)
+    .expect(201);
+
+    // save by a non owner
+    await request(app.getHttpServer())
+    .post(`/posts/${post1Id}/save`)
+    .set('Authorization', `Bearer ${teacherToken}`)
+    .expect(201);
+
+    await request(app.getHttpServer())
+    .post(`/posts/${post2Id}/save`)
+    .set('Authorization', `Bearer ${teacherToken}`)
+    .expect(201);
+  })
+
+  // get saved posts by teacher
+  it('/posts/saved (GET)', async () => {
+    const res = await request(app.getHttpServer())
+    .get('/posts/saved')
+    .set('Authorization', `Bearer ${teacherToken}`)
+    .expect(200);
+
+    console.log(res.body)
+
+    expect(res.body.length).toBe(2)
   })
 
   it('/posts/:postId (DELETE)', async () => {

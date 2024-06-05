@@ -15,6 +15,14 @@ import { CursorQueryDto } from './dto/cursor.dto';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
+  @Get('/saved')
+  @HttpCode(HttpStatus.OK)
+  getSavedPosts(
+    @Req() req: (Request & { user: { id: string } }),
+  ) {
+    return this.postsService.getSavedPosts(req.user.id);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @ApiBody({type: CreatePostDto})
@@ -60,4 +68,16 @@ export class PostsController {
   remove(@Param() params: PostIdParamDto) {
     return this.postsService.remove(params.postId);
   }
+
+
+  @Post('/:postId/save')
+  @HttpCode(HttpStatus.CREATED)
+  savePost(
+    @Param() params: PostIdParamDto,
+    @Req() req: (Request & { user: { id: string } }),
+  ) {
+    // this controller can be used for both save and unsave
+    return this.postsService.savePost(params.postId, req.user.id);
+  }
+ 
 }
