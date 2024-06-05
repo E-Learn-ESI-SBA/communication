@@ -12,6 +12,7 @@ import {
 import { Vote } from "./vote.entity";
 import { User } from "../../users/entities/user.entity";
 import { Comment } from "./comment.entity";
+import { Save } from "./save.entity";
 
 @Entity('posts')
 export class Post {
@@ -50,6 +51,10 @@ export class Post {
     @OneToMany(() => Vote, vote => vote.post)
     @JoinColumn()
     votes: Vote[]
+
+    @OneToMany(() => Save, save => save.post)
+    @JoinColumn()
+    saves: Save[]
 
     @OneToMany(() => Comment, comment => comment.post)
     @JoinColumn()
