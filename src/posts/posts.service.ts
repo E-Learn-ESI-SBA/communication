@@ -29,8 +29,12 @@ export class PostsService {
     return res
   }
 
-  async findAll() {
-    return await this.postsRepo.find();
+  async findAll(page: number = 0, limit: number = 5) {
+    return await this.postsRepo.find({
+      relations: ['votes', 'votes.user'],
+      take: limit,
+      skip: page * limit,
+    })
   }
 
   async findOne(id: string) {
