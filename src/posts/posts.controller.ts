@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Req, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, UseGuards, Req, Post, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -8,6 +8,7 @@ import { PostOwnerGuard } from '../guards/post-owner.guard';
 import { Post as PostEntity } from './entities/post.entity';
 import { User } from '../users/entities/user.entity';
 import { ApiBody, ApiParam } from '@nestjs/swagger'
+import { CursorQueryDto } from './dto/cursor.dto';
 
 @Controller('posts')
 @UseGuards(AuthGuard())
@@ -26,8 +27,12 @@ export class PostsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll() {
-    return this.postsService.findAll();
+  findAll(
+    @Query() query: CursorQueryDto
+  ) {
+    const page = query.page?  query.page : 0;
+    const limit = query.limit? query.limit : 5;
+    return this.postsService.findAll(page, limit);
   }
 
   @Get('/:postId')
