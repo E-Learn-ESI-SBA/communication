@@ -8,4 +8,4 @@ services:
       POSTGRES_USER: communication
       POSTGRES_PASSWORD: communication
     ports:
-      - "5432:5432"
+      - "7777:5432"
