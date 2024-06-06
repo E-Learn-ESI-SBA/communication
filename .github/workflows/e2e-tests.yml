@@ -3,7 +3,12 @@ name: end to end tests
 on: [pull_request, push]
 
 env:
-    JWT_SECRET: aTZ6czFOcTFHekRrZEJHUTB5cFlZZ0M1aXQyR3FiNlltaWx5aDJFUWpIQT0K
+  JWT_SECRET: aTZ6czFOcTFHekRrZEJHUTB5cFlZZ0M1aXQyR3FiNlltaWx5aDJFUWpIQT0K
+  POSTGRES_USER: communication
+  POSTGRES_PASS: communication
+  POSTGRES_DB: communication
+  POSTGRES_PORT: 7777
+  POSTGRES_HOST: localhost
 
 jobs:
   tests:
