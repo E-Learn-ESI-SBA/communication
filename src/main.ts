@@ -22,6 +22,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(); // allow all origins
-  await app.listen(8001);
+  await app.listen(8080);
 }
 bootstrap();
