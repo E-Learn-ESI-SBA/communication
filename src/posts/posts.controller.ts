@@ -36,11 +36,12 @@ export class PostsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   findAll(
-    @Query() query: CursorQueryDto
+    @Query() query: CursorQueryDto,
+    @Req() req: (Request & { user: { id: string } }),
   ) {
     const page = query.page?  query.page : 0;
     const limit = query.limit? query.limit : 5;
-    return this.postsService.findAll(page, limit);
+    return this.postsService.findAll(page, limit, req.user.id);
   }
 
   @Get('/:postId')

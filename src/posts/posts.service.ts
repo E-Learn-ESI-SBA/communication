@@ -31,12 +31,24 @@ export class PostsService {
     return res
   }
 
-  async findAll(page: number = 0, limit: number = 5) {
-    return await this.postsRepo.find({
-      relations: ['votes', 'votes.user', 'user'],
+  async findAll(page: number = 0, limit: number = 5, userId: string) {
+    const res = await this.postsRepo.find({
+      relations: ['votes', 'votes.user', 'user', 'saves', 'saves.user'],
       take: limit,
       skip: page * limit,
     })
+
+
+    // filter the post and add isSaved field for each post
+    for (let i = 0; i < res.length; i++) {
+      // @ts-ignore
+      res[i].isSaved = false;
+      // @ts-ignore
+      res[i].isSaved = res[i].saves.some(save => save.user.id === userId)
+    }
+
+    
+    return res;
   }
 
   async findOne(id: string) {
@@ -69,9 +81,10 @@ export class PostsService {
     const save = await this.savesRepo.findOne({
       where: {
         user: {id: userId},
-        post: {id: postId}
-      }
+        post: {id: postId},
+      },
     });
+
 
     if (!save) {
       await this.savesRepo.insert({
@@ -88,7 +101,9 @@ export class PostsService {
       }
     } 
 
-    await this.savesRepo.delete(save);
+    await this.savesRepo.delete({
+      id: save.id
+    });
 
     return {
       message: "Post unsaved successfully"
