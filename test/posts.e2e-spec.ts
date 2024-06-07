@@ -74,7 +74,7 @@ describe('postsController (e2e)', () => {
     return
   });
 
-  //test get post by id
+  // test get post by id
   it('/posts/:postId (GET)', async () => {
     const res = await request(app.getHttpServer())
     .get(`/posts/${post1Id}`)
