@@ -1,9 +1,10 @@
 FROM node:lts-slim
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install -g yarn
+RUN yarn install
 COPY . .
 RUN npm run build
 
 EXPOSE 8080
-CMD [ "npm", "run","start:prod" ]
+CMD [ "yarn", "run","start:prod" ]
