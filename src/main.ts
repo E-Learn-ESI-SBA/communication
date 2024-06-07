@@ -22,6 +22,7 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors(); // allow all origins
-  await app.listen(8080);
+  // listing address 0.0.0.0:8080
+  await app.listen(8080, '0.0.0.0');
 }
 bootstrap();
