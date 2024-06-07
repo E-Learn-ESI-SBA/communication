@@ -1,0 +1,24 @@
+version: '3'
+services:
+  communication:
+    build: .
+    container_name: communication
+    ports:
+      - "8888:8080"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=communication
+      - POSTGRES_PASS=communication
+      - POSTGRES_DB=communication
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: communication
+      POSTGRES_PASSWORD: communication
+    ports:
+      - "5432:5432"

@@ -19,7 +19,6 @@ import { OtherSkill } from './profile/entities/other-skill.entity';
 import { Education } from './profile/entities/education.entity';
 import { Save } from './posts/entities/save.entity';
 
-
 @Module({
   imports: [
     PostsModule,
@@ -30,11 +29,27 @@ import { Save } from './posts/entities/save.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.POSTGRES_HOST || 'localhost',
-      port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT) : 7777,
-      username: process.env.POSTGRES_USER || 'communication',
-      password: process.env.POSTGRES_PASS || 'communication',
+      port: process.env.POSTGRES_PORT
+        ? parseInt(process.env.POSTGRES_PORT)
+        : 5432,
+      username: process.env.POSTGRES_USER || 'postgres',
+      password: process.env.POSTGRES_PASS || 'postgres',
       database: process.env.POSTGRES_DB || 'communication',
-      entities: [Post, User, Save, Follow, Vote, Comment, Profile, Experience, Project, Award, Skill, OtherSkill, Education],
+      entities: [
+        Post,
+        User,
+        Save,
+        Follow,
+        Vote,
+        Comment,
+        Profile,
+        Experience,
+        Project,
+        Award,
+        Skill,
+        OtherSkill,
+        Education,
+      ],
       synchronize: true,
     }),
     UsersModule,
