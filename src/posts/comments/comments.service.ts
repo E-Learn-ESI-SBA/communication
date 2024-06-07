@@ -69,10 +69,6 @@ export class CommentsService {
             relations: ['user']   
         })
 
-        if (res.length === 0) {
-            throw new NotFoundException("comments not found")
-        }
-
         return res
     }
 }
