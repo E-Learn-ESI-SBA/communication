@@ -2,13 +2,16 @@ import { CanActivate, ExecutionContext, Inject, Injectable, Type, UnauthorizedEx
 import { ValidateToken } from '../lib/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
+import { DataSource } from 'typeorm';
+import { Profile } from '../profile/entities/profile.entity';
 
 
 
 export const AuthGuard = (): Type<CanActivate> => {
   class ScopeGuard {
     constructor(
-      @Inject(UsersService) private readonly userService: UsersService
+      @Inject(UsersService) private readonly userService: UsersService,
+      @Inject(DataSource) private readonly dataSource: DataSource
     ) {}
 
     async canActivate(
@@ -30,11 +33,24 @@ export const AuthGuard = (): Type<CanActivate> => {
             throw user;
           }
           request.user = user;
+          // upserting the user and profile
           const userToUpsert = new User()
           userToUpsert.id = user.id
           userToUpsert.avatar = user.avatar
           userToUpsert.username = user.username
           await this.userService.upsert(userToUpsert)
+          await this.dataSource.getRepository(Profile).upsert({
+            user: {
+              id: user.id
+            },
+            image: user.avatar,
+            summary: '',
+          }, {
+            conflictPaths: ['user.id'],
+            skipUpdateIfNoValuesChanged: true,
+            upsertType: 'on-duplicate-key-update'
+          })
+          // end
           return true
       } catch (e) {
           const message = e instanceof Error ? e.message : "Unauthorized";
@@ -47,23 +63,3 @@ export const AuthGuard = (): Type<CanActivate> => {
   }
   return mixin(ScopeGuard)
 }
-
-// @Injectable()
-// export class AuthGuard implements CanActivate {
-
-//   constructor(
-//     private readonly userService: UsersService
-//   ) {}
-
-// }
-
-// }
-
-
-// @Global()
-// @Module({
-//     providers: [UsersService],
-//     imports: [UsersModule],
-//     exports: [AuthGuard]
-// })
-// export class ApiModule {}
