@@ -19,6 +19,7 @@ import { OtherSkill } from './profile/entities/other-skill.entity';
 import { Education } from './profile/entities/education.entity';
 import { Save } from './posts/entities/save.entity';
 import { CommentLike } from './posts/entities/comment-like.entity';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { CommentLike } from './posts/entities/comment-like.entity';
       synchronize: true,
     }),
     UsersModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],
