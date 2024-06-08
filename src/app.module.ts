@@ -18,6 +18,7 @@ import { Skill } from './profile/entities/skill.entity';
 import { OtherSkill } from './profile/entities/other-skill.entity';
 import { Education } from './profile/entities/education.entity';
 import { Save } from './posts/entities/save.entity';
+import { CommentLike } from './posts/entities/comment-like.entity';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { Save } from './posts/entities/save.entity';
         Follow,
         Vote,
         Comment,
+        CommentLike,
         Profile,
         Experience,
         Project,

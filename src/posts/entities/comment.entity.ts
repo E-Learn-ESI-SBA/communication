@@ -1,6 +1,7 @@
 import { User } from "../../users/entities/user.entity"
-import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Column, ManyToOne, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm"
 import { Post } from "./post.entity"
+import { CommentLike } from "./comment-like.entity"
 
 @Entity('comments')
 export class Comment {
@@ -10,6 +11,9 @@ export class Comment {
 
     @Column()
     text: string
+
+    @OneToMany(() => CommentLike, commentLike => commentLike.comment)
+    likes: CommentLike[]
 
     @ManyToOne(() => User, user=> user.votes , { onDelete: 'CASCADE' })
     user: User

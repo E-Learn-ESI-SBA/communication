@@ -3,6 +3,7 @@ import { Follow } from "./follow.entity";
 import { Vote } from "../../posts/entities/vote.entity";
 import { Post } from "../../posts/entities/post.entity";
 import { Profile } from "../../profile/entities/profile.entity";
+import { CommentLike } from "../../posts/entities/comment-like.entity";
 
 @Entity('users')
 export class User {
@@ -31,6 +32,10 @@ export class User {
     @OneToMany( () => Post, post => post.user, { cascade: true })
     @JoinColumn()
     posts: Post[]
+
+    @OneToMany(() => CommentLike, commentLike => commentLike.user, { cascade: true })
+    @JoinColumn()
+    likes: CommentLike[]
 
     @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
     @JoinColumn()
