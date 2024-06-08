@@ -5,7 +5,7 @@ import { UpdateProfileDto } from  './dto/update-profile.dto';
 import { ApiBody, ApiParam } from '@nestjs/swagger';
 import { ProfileIdParamDto } from './dto/profileid-param.dto';
 import { Profile as ProfileEntity } from './entities/profile.entity';
-import { ProfileOwnerGuard } from 'src/guards/profile-owner.guard';
+import { ProfileOwnerGuard } from '../guards/profile-owner.guard';
 @Controller('profiles')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
@@ -37,6 +37,14 @@ export class ProfileController {
   update(@Param() params: ProfileIdParamDto, @Body() updateProfileDto: UpdateProfileDto) {
     return this.profileService.update(params.profileId, updateProfileDto);
   }
+
+  // @Patch(':profileId/summary')
+  // @UseGuards(ProfileOwnerGuard(ProfileEntity))
+  // @HttpCode(200)
+  // @ApiParam({ name: 'profileId', required: true, type: 'uuid' })
+  // update(@Param() params: ProfileIdParamDto, @Body() updateProfileDto: UpdateProfileDto) {
+  //   return this.profileService.update(params.profileId, updateProfileDto);
+  // }
 
   @Delete(':profileId')
   @UseGuards(ProfileOwnerGuard(ProfileEntity))
