@@ -39,17 +39,27 @@ export const AuthGuard = (): Type<CanActivate> => {
           userToUpsert.avatar = user.avatar
           userToUpsert.username = user.username
           await this.userService.upsert(userToUpsert)
-          await this.dataSource.getRepository(Profile).upsert({
-            user: {
-              id: user.id
-            },
-            image: user.avatar,
-            summary: '',
-          }, {
-            conflictPaths: ['user.id'],
-            skipUpdateIfNoValuesChanged: true,
-            upsertType: 'on-duplicate-key-update'
+          const profile = await this.dataSource.getRepository(Profile).findOne({
+            where: {
+              user: {
+                id: user.id
+              }
+            }
           })
+          if (profile) {
+            await this.dataSource.getRepository(Profile).upsert({
+              user: {
+                id: user.id
+              },
+              id : user.id,
+              image: user.avatar,
+              summary: '',
+            }, {
+              conflictPaths: ['user.id'],
+              skipUpdateIfNoValuesChanged: true,
+              upsertType: 'on-duplicate-key-update'
+            })
+          }
           // end
           return true
       } catch (e) {

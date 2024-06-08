@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, OneToMany, PrimaryColumn } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Experience } from './experience.entity';
 import { Project } from './project.entity';
@@ -9,8 +9,8 @@ import { Education } from './education.entity';
 
 @Entity()
 export class Profile {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryColumn('uuid')
+    id: string
 
   @Column()
   image: string;
