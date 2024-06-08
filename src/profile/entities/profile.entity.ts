@@ -9,7 +9,7 @@ import { Education } from './education.entity';
 
 @Entity()
 export class Profile {
-  @PrimaryColumn('uuid')
+  @PrimaryColumn()
     id: string
 
   @Column()
