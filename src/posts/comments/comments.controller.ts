@@ -16,7 +16,9 @@ export class CommentsController {
 
   @Get('')
   @HttpCode(HttpStatus.OK)
-  async getPostComments(@Param() params: PostIdParamDto) {
+  async getPostComments(
+    @Param() params: PostIdParamDto
+  ) {
     return this.commentsService.getPostComments(params.postId)
   }
 
@@ -50,6 +52,25 @@ export class CommentsController {
     @Param() params: CommentIdParamDto
   ) {
     return this.commentsService.editComment(body, params.commentId)
+  }
+
+
+  @Post('/:commentId/like')
+  @HttpCode(HttpStatus.OK)
+  async likeComment(
+    @Req() req: Request & { user: { id: string } },
+    @Param() params: CommentIdParamDto
+  ) {
+    return this.commentsService.likeComment(params.commentId, req.user.id)
+  }
+
+
+  @Get('/:commentId/likes')
+  @HttpCode(HttpStatus.OK)
+  async getCommentLikes(
+    @Param() params: CommentIdParamDto
+  ) {
+    return this.commentsService.getCommentLikes(params.commentId)
   }
 
 }
